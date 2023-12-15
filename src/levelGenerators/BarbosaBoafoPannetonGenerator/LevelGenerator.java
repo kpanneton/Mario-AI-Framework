@@ -12,8 +12,8 @@ public class LevelGenerator implements MarioLevelGenerator {
     private static final int WIDTH = 320;
     private static final int HEIGHT = 15;
     private static final int GROUND_HEIGHT = 2;
-    private static final int NUM_PLATFORMS = 5;
-    private static final int NUM_ICE_BLOCKS = 3;
+    private static final int NUM_PLATFORMS = 3;  // Reduce the number of platforms
+    private static final int NUM_ICE_BLOCKS = 2;  // Reduce the number of ice blocks
     private static final int NUM_COINS = 5;
     private static final int SNOW_GROUND = 5;
     private static final int ICE_BLOCK = 6;
@@ -29,11 +29,14 @@ public class LevelGenerator implements MarioLevelGenerator {
     public String getGeneratedLevel(MarioLevelModel model, MarioTimer timer) {
         int[][] level = generateColdThemeLevel();
 
+        // Map integer values to their corresponding symbols
+        char[] symbols = {'#', ' ', ' ', ' ', ' ', ' ', 'I', 'C'};
+
         // Convert the 2D array to a string representation
         StringBuilder levelString = new StringBuilder();
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
-                levelString.append(level[y][x]);
+                levelString.append(symbols[level[y][x]]);
             }
             levelString.append("\n");
         }
