@@ -15,6 +15,10 @@ public class LevelGenerator implements MarioLevelGenerator {
     private static final int NUM_PLATFORMS = 5;
     private static final int NUM_ICE_BLOCKS = 3;
     private static final int NUM_COINS = 5;
+    private static final int SNOW_GROUND = 5;
+    private static final int ICE_BLOCK = 6;
+    private static final int EMPTY_SPACE = 0;
+    private static final int COIN = 7;
 
     @Override
     public String getGeneratorName() {
@@ -39,50 +43,56 @@ public class LevelGenerator implements MarioLevelGenerator {
     }
 
     private int[][] generateColdThemeLevel() {
-    int[][] level = new int[HEIGHT][WIDTH];
+        int[][] level = new int[HEIGHT][WIDTH];
 
-    // Place snow-covered ground tiles
-    for (int x = 0; x < WIDTH; x++) {
-        for (int y = HEIGHT - GROUND_HEIGHT; y < HEIGHT; y++) {
-            level[y][x] = 5;  // 5 represents snow-covered ground
-        }
-    }
-
-    // Place ice blocks
-    Random random = new Random();
-    for (int i = 0; i < NUM_ICE_BLOCKS; i++) {
-        int iceX = random.nextInt(WIDTH - 3);
-        int iceY = random.nextInt(HEIGHT - GROUND_HEIGHT - 1);
-        level[iceY][iceX] = 6;  // 6 represents ice block
-    }
-
-    // Place platforms
-    for (int i = 0; i < NUM_PLATFORMS; i++) {
-        int platformWidth = random.nextInt(10) + 5;
-        int platformHeight = random.nextInt(3) + 1;
-        int platformX = random.nextInt(WIDTH - platformWidth);
-        int platformY = random.nextInt(HEIGHT - GROUND_HEIGHT - platformHeight);
-
-        // Fill the entire bottom row with snow-covered ground
+        // Place snow-covered ground tiles
         for (int x = 0; x < WIDTH; x++) {
-            level[HEIGHT - GROUND_HEIGHT - 1][x] = 5;
-        }
-
-        // Place the platform above the snow-covered ground
-        for (int x = platformX; x < platformX + platformWidth; x++) {
-            for (int y = platformY; y < platformY + platformHeight; y++) {
-                level[y][x] = 0;  // 0 represents an empty space above the ground
+            for (int y = HEIGHT - GROUND_HEIGHT; y < HEIGHT; y++) {
+                level[y][x] = SNOW_GROUND;
             }
         }
-    }
 
-    // Place coins
-    for (int i = 0; i < NUM_COINS; i++) {
-        int coinX = random.nextInt(WIDTH - 2);
-        int coinY = random.nextInt(HEIGHT - GROUND_HEIGHT - 1);
-        level[coinY][coinX] = 7;  // 7 represents a coin
-    }
+        // Place starting platform
+        int startPlatformWidth = 5;
+        int startPlatformHeight = 1;
+        int startPlatformX = WIDTH / 2 - startPlatformWidth / 2;
+        int startPlatformY = HEIGHT - GROUND_HEIGHT - startPlatformHeight;
+        for (int x = startPlatformX; x < startPlatformX + startPlatformWidth; x++) {
+            for (int y = startPlatformY; y < startPlatformY + startPlatformHeight; y++) {
+                level[y][x] = EMPTY_SPACE;
+            }
+        }
 
-    return level;
+        // Place ice blocks
+        Random random = new Random();
+        for (int i = 0; i < NUM_ICE_BLOCKS; i++) {
+            int iceX = random.nextInt(WIDTH - 3);
+            int iceY = random.nextInt(HEIGHT - GROUND_HEIGHT - 1);
+            level[iceY][iceX] = ICE_BLOCK;
+        }
+
+        // Place platforms
+        for (int i = 0; i < NUM_PLATFORMS; i++) {
+            int platformWidth = random.nextInt(10) + 5;
+            int platformHeight = random.nextInt(3) + 1;
+            int platformX = random.nextInt(WIDTH - platformWidth);
+            int platformY = random.nextInt(HEIGHT - GROUND_HEIGHT - platformHeight);
+
+            // Place the platform above the snow-covered ground
+            for (int x = platformX; x < platformX + platformWidth; x++) {
+                for (int y = platformY; y < platformY + platformHeight; y++) {
+                    level[y][x] = EMPTY_SPACE;
+                }
+            }
+        }
+
+        // Place coins
+        for (int i = 0; i < NUM_COINS; i++) {
+            int coinX = random.nextInt(WIDTH - 2);
+            int coinY = random.nextInt(HEIGHT - GROUND_HEIGHT - 1);
+            level[coinY][coinX] = COIN;
+        }
+
+        return level;
     }
 }
