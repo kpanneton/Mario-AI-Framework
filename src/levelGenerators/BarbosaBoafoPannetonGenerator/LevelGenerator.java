@@ -10,7 +10,7 @@ public class LevelGenerator implements MarioLevelGenerator {
 
     // Constants for the level generation parameters
     private static final int WIDTH = 100;
-    private static final int HEIGHT = 5;
+    private static final int HEIGHT = 15; // Adjusted the height to provide more space
     private static final int GROUND_HEIGHT = 2;
     private static final int SNOW_GROUND = 5;
     private static final int ICE_BLOCK = 6;
@@ -46,28 +46,29 @@ public class LevelGenerator implements MarioLevelGenerator {
         int[][] level = new int[HEIGHT][WIDTH];
         int totalBlocks = 50; // Adjust the total number of blocks as needed
 
-        // Place spaced out blocks
+        // Place spaced out blocks starting from the bottom
         Random random = new Random();
-        for (int i = 0; i < totalBlocks; i++) {
-            int blockX = random.nextInt(WIDTH);
-            int blockY = random.nextInt(HEIGHT - GROUND_HEIGHT);
+        for (int y = HEIGHT - GROUND_HEIGHT - 1; y >= 0; y--) {
+            for (int i = 0; i < totalBlocks; i++) {
+                int blockX = random.nextInt(WIDTH);
 
-            // Check if the space is empty before placing the block
-            if (level[blockY][blockX] == EMPTY_SPACE) {
-                level[blockY][blockX] = SNOW_GROUND;
-            } else {
-                // If the space is not empty, try placing the block elsewhere
-                i--;
+                // Check if the space is empty before placing the block
+                if (level[y][blockX] == EMPTY_SPACE) {
+                    level[y][blockX] = SNOW_GROUND;
+                } else {
+                    // If the space is not empty, try placing the block elsewhere
+                    i--;
+                }
             }
         }
 
         // Place starting platform
         int startPlatformWidth = 5;
         int startPlatformHeight = 1;
-        int startPlatformX = WIDTH / 2 - startPlatformWidth / 2;
+        int startPlatformX = WIDTH / 4 - startPlatformWidth / 2;  // Adjusted the position
         int startPlatformY = HEIGHT - GROUND_HEIGHT - startPlatformHeight;
         for (int x = startPlatformX; x < startPlatformX + startPlatformWidth; x++) {
-            for (int y = startPlatformY; y < startPlatformY + startPlatformHeight; y++) {
+            for (int y = startPlatformY; y < HEIGHT; y++) {
                 level[y][x] = EMPTY_SPACE;
             }
         }
@@ -105,3 +106,5 @@ public class LevelGenerator implements MarioLevelGenerator {
         return level;
     }
 }
+
+
